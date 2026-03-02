@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patronus | Marketing Digital & Estratégia</title>
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #050608;
+            --bg-grey: #121418;
+            --accent-blue: #4a5d7a;
+            --accent-glow: rgba(74, 93, 122, 0.15);
+            --text-light: #f8f9fa;
+            --text-muted: #8a94a1;
+            --white: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* --- TELA DE CARREGAMENTO (LOADER) --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        #loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: 60px;
+            stroke: var(--white);
+            stroke-width: 1.5;
+            fill: none;
+            animation: pulseLogo 2s infinite ease-in-out;
+        }
+
+        .loader-bar-container {
+            width: 150px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: var(--white);
+            animation: fillBar 3s forwards cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes fillBar {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND DINÂMICO --- */
+        .bg-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #15181d 0%, #050608 100%);
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--accent-glow);
+            filter: blur(120px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: floatOrb 20s infinite alternate;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(-10%, -10%); }
+            100% { transform: translate(20%, 30%); }
+        }
+
+        .geo-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(500px) rotateX(60deg);
+            bottom: -50%;
+            left: -50%;
+            mask-image: linear-gradient(to top, black, transparent);
+            opacity: 0.4;
+        }
+
+        /* --- TIPOGRAFIA --- */
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-padding {
+            padding: 140px 0;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--white);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            border-radius: 2px;
+            transition: var(--transition);
+            border: 1px solid var(--white);
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--white);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 30px 0;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background: rgba(5, 6, 8, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 5px;
+        }
+
+        .logo svg {
+            width: 35px;
+            height: 35px;
+            stroke: var(--white);
+            stroke-width: 1.5;
+            transition: var(--transition);
+            fill: none;
+        }
+
+        .logo:hover svg {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 400;
+            transition: var(--transition);
+            letter-spacing: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            line-height: 0.9;
+            margin-bottom: 30px;
+            background: linear-gradient(to bottom, #fff 40%, #555 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+            font-weight: 200;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 50px;
+            letter-spacing: 1px;
+        }
+
+        /* --- IMAGENS ESTILIZADAS --- */
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            background: var(--bg-grey);
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) brightness(0.7);
+            transition: var(--transition);
+        }
+
+        .img-container:hover img {
+            filter: grayscale(0%) brightness(0.9);
+            transform: scale(1.05);
+        }
+
+        /* --- SERVIÇOS --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card .card-image {
+            height: 180px;
+            margin-bottom: 25px;
+            border-radius: 2px;
+        }
+
+        .service-card:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-5px);
+        }
+
+        .service-card i {
+            color: var(--white);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .service-card h3 {
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .service-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* --- TESTEMUNHOS --- */
+        .testimonial-slide p {
+            font-size: 1.5rem;
+            font-weight: 200;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.4;
+        }
+
+        /* --- RODAPÉ --- */
+        footer {
+            padding: 100px 0 50px;
+            border-top: 1px solid var(--border);
+        }
+
+        .copyright {
+            margin-top: 40px;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-content h1 { font-size: 3.5rem; }
+            .section-padding { padding: 80px 0; }
+            .about-flex { flex-direction: column; }
+        }
+
+        /* Grid de Sobre */
+        .about-flex {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-content">
+            <svg class="loader-logo" viewBox="0 0 100 100">
+                <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" />
+            </svg>
+            <div class="loader-bar-container">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-wrapper">
+        <div class="glow-orb"></div>
+        <div class="geo-grid"></div>
+    </div>
+
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <svg viewBox="0 0 100 100">
+                        <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" />
+                        <path d="M50 10 L50 70" opacity="0.3" />
+                    </svg>
+                    <span>PATRONUS</span>
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1 class="reveal">Arquitetura Digital.</h1>
+            <p class="reveal">Cuidamos da sua presença online com precisão geométrica e inteligência estratégica aplicada ao mercado.</p>
+            <a href="#contato" class="btn reveal">Iniciar Projeto</a>
+        </div>
+    </section>
+
+    <section class="about section-padding" id="sobre">
+        <div class="container">
+            <div class="about-flex">
+                <div style="flex: 1;">
+                    <div class="section-title reveal">
+                        <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">01. Manifesto</h2>
+                        <h2 style="margin-top: 10px;">Sobre a Patronus</h2>
+                    </div>
+                    <p class="about-text reveal" style="text-align: left; margin-bottom: 30px;">
+                        Somos especialistas em estratégias inteligentes para ecossistemas digitais. Ajudamos marcas a expandir o seu alcance através da interseção entre criatividade, análise de dados e design futurista. 
+                        <br><br>
+                        O nosso foco é a transformação da identidade digital com resultados de alta performance e estética minimalista.
+                    </p>
+                </div>
+                <div style="flex: 1;" class="reveal">
+                    <div class="img-container" style="height: 400px;">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800" alt="[Imagem de escritório moderno e minimalista]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services section-padding" id="servicos">
+        <div class="container">
+            <div class="section-title reveal" style="margin-bottom: 60px;">
+                <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">02. Especialidades</h2>
+                <h2 style="margin-top: 10px;">Serviços</h2>
+            </div>
+
+            <div class="services-grid">
+                <!-- Redes Sociais -->
+                <div class="service-card reveal">
+                    <div class="img-container card-image">
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600" alt="[Imagem de equipe colaborando em estratégia]">
+                    </div>
+                    <i data-lucide="zap" size="20"></i>
+                    <h3>Redes Sociais</h3>
+                    <p>Gestão de alto impacto e curadoria estratégica de conteúdo para marcas que buscam relevância real.</p>
+                </div>
+                <!-- Tráfego Pago -->
+                <div class="service-card reveal">
+                    <div class="img-container card-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600" alt="[Imagem de gráficos de análise de dados]">
+                    </div>
+                    <i data-lucide="target" size="20"></i>
+                    <h3>Tráfego Pago</h3>
+                    <p>Escalabilidade garantida através de performance baseada em inteligência de dados puros.</p>
+                </div>
+                <!-- Branding -->
+                <div class="service-card reveal">
+                    <div class="img-container card-image">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=600" alt="[Imagem de tipografia e design de marca]">
+                    </div>
+                    <i data-lucide="aperture" size="20"></i>
+                    <h3>Branding</h3>
+                    <p>Construção de identidades visuais memoráveis que traduzem a alma do seu negócio em formas.</p>
+                </div>
+                <!-- Web Design -->
+                <div class="service-card reveal">
+                    <div class="img-container card-image">
+                        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=600" alt="[Imagem de interface de usuário minimalista]">
+                    </div>
+                    <i data-lucide="terminal" size="20"></i>
+                    <h3>Web Design</h3>
+                    <p>Interfaces intuitivas que convertem visitantes em clientes fiéis, elevando o padrão estético.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials section-padding">
+        <div class="container">
+            <div class="testimonial-slider reveal">
+                <div class="testimonial-track" id="sliderTrack">
+                    <div class="testimonial-slide">
+                        <p>"A Patronus redefiniu completamente o nosso padrão de qualidade digital."</p>
+                        <span style="letter-spacing: 2px; font-size: 0.7rem; color: var(--text-muted);">CEO DA TECHFLOW</span>
+                    </div>
+                    <div class="testimonial-slide">
+                        <p>"Design futurista aliado a resultados comerciais tangíveis e imediatos."</p>
+                        <span style="letter-spacing: 2px; font-size: 0.7rem; color: var(--text-muted);">GRUPO VISION</span>
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact section-padding" id="contato">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 80px;" class="reveal">
+                <h2 style="font-size: clamp(2rem, 5vw, 3rem);">Pronto para escalar?</h2>
+                <p style="color: var(--text-muted);">A sua próxima fase de crescimento começa aqui.</p>
+            </div>
+            
+            <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;" class="reveal">
+                <a href="https://wa.me/5541996641617" class="btn">WhatsApp</a>
+                <a href="mailto:patronusphoto@gmail.com" class="btn" style="background: transparent; color: white;">E-mail</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container" style="text-align: center;">
+            <div class="logo" style="justify-content: center;">
+                <svg viewBox="0 0 100 100" style="width: 20px; height: 20px;">
+                    <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" fill="none" stroke="white" stroke-width="2"/>
+                </svg>
+                <span style="font-size: 0.8rem;">PATRONUS</span>
+            </div>
+            <p class="copyright">&copy; 2026 AGÊNCIA PATRONUS. ALÉM DO DIGITAL.</p>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Lógica do Loader (3 segundos)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.classList.add('fade-out');
+                // Inicia as animações de revelação após o loader sair
+                setTimeout(reveal, 200);
+            }, 3000);
+        });
+
+        // Lógica de Scroll do Cabeçalho
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Lógica de Revelação de Elementos
+        const reveal = () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+                    el.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', reveal);
+
+        // Lógica do Slider de Testemunhos
+        const track = document.getElementById('sliderTrack');
+        const dotsContainer = document.getElementById('sliderDots');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        let current = 0;
+
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dot.style.cssText = "width:6px; height:6px; background:rgba(255,255,255,0.1); border-radius:50%; cursor:pointer; transition:0.3s; margin: 0 5px;";
+            if(i===0) dot.style.background = "white";
+            dot.addEventListener('click', () => {
+                current = i;
+                update();
+            });
+            dotsContainer.appendChild(dot);
+        });
+
+        function update() {
+            track.style.transform = `translateX(-${current * 100}%)`;
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.style.background = i === current ? "white" : "rgba(255,255,255,0.1)";
+            });
+        }
+
+        setInterval(() => {
+            current = (current + 1) % slides.length;
+            update();
+        }, 6000);
+    </script>
+</body>
+</html>
