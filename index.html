@@ -3,56 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patronus | Marketing Digital & Estratégia</title>
+    <title>Patronus | Sua Marca no Próximo Nível</title>
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
     <!-- Ícones Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
-            --bg-dark: #050608;
-            --bg-grey: #121418;
-            --accent-blue: #4a5d7a;
-            --accent-glow: rgba(74, 93, 122, 0.15);
-            --text-light: #f8f9fa;
-            --text-muted: #8a94a1;
+            --bg-deep: #020408;
+            --bg-card: rgba(15, 20, 28, 0.7);
+            --accent-primary: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --text-main: #e2e8f0;
+            --text-dim: #94a3b8;
             --white: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
-            --transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --grad-linear: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            outline: none;
         }
 
-        /* --- TELA DE CARREGAMENTO (LOADER) --- */
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- TELA DE CARREGAMENTO --- */
         #loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-dark);
+            inset: 0;
+            background: #000;
+            z-index: 10000;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            transition: transform 1s cubic-bezier(0.85, 0, 0.15, 1), opacity 0.8s;
         }
 
         #loader.fade-out {
+            transform: translateY(-100%);
             opacity: 0;
-            visibility: hidden;
+            pointer-events: none;
         }
 
         .loader-content {
-            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -60,163 +65,56 @@
         }
 
         .loader-logo {
-            width: 60px;
-            height: 60px;
-            stroke: var(--white);
-            stroke-width: 1.5;
-            fill: none;
-            animation: pulseLogo 2s infinite ease-in-out;
+            width: 70px;
+            animation: bounceLogo 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 15px var(--accent-glow));
         }
 
-        .loader-bar-container {
-            width: 150px;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+        @keyframes bounceLogo {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(-10px); opacity: 1; }
         }
 
-        .loader-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 0;
-            background: var(--white);
-            animation: fillBar 3s forwards cubic-bezier(0.65, 0, 0.35, 1);
-        }
-
-        @keyframes pulseLogo {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        @keyframes fillBar {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* --- BACKGROUND DINÂMICO --- */
-        .bg-wrapper {
+        /* --- FUNDO DINÂMICO --- */
+        .bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, #15181d 0%, #050608 100%);
+            inset: 0;
             z-index: -1;
-            overflow: hidden;
+            background: radial-gradient(circle at top right, #0a101f 0%, #020408 100%);
         }
 
-        .glow-orb {
+        .orb {
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: var(--accent-glow);
-            filter: blur(120px);
             border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.3;
             z-index: -1;
-            animation: floatOrb 20s infinite alternate;
+            animation: orbMovement 25s infinite alternate ease-in-out;
         }
 
-        @keyframes floatOrb {
-            0% { transform: translate(-10%, -10%); }
-            100% { transform: translate(20%, 30%); }
+        .orb-1 { width: 500px; height: 500px; background: #1d4ed8; top: -100px; right: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #4f46e5; bottom: -50px; left: -100px; }
+
+        @keyframes orbMovement {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(50px, 100px) scale(1.1); }
         }
 
-        .geo-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(500px) rotateX(60deg);
-            bottom: -50%;
-            left: -50%;
-            mask-image: linear-gradient(to top, black, transparent);
-            opacity: 0.4;
-        }
-
-        /* --- TIPOGRAFIA --- */
-        h1, h2, h3 {
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 900;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .section-padding {
-            padding: 140px 0;
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: var(--transition);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 16px 40px;
-            background: var(--white);
-            color: var(--bg-dark);
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            border-radius: 2px;
-            transition: var(--transition);
-            border: 1px solid var(--white);
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: transparent;
-            color: var(--white);
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
             position: fixed;
-            top: 0;
-            width: 100%;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
             z-index: 1000;
-            padding: 30px 0;
-            transition: var(--transition);
-        }
-
-        header.scrolled {
-            background: rgba(5, 6, 8, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
+            padding: 15px 40px;
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 100px;
+            transition: var(--transition-smooth);
         }
 
         nav {
@@ -228,404 +126,283 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-weight: 800;
-            font-size: 1.2rem;
+            gap: 10px;
             color: var(--white);
             text-decoration: none;
-            letter-spacing: 5px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
         }
 
-        .logo svg {
-            width: 35px;
-            height: 35px;
-            stroke: var(--white);
-            stroke-width: 1.5;
-            transition: var(--transition);
-            fill: none;
-        }
-
-        .logo:hover svg {
-            transform: rotate(15deg) scale(1.1);
-        }
+        .logo svg { width: 30px; height: 30px; stroke: var(--accent-primary); fill: none; }
 
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 25px;
             list-style: none;
         }
 
         .nav-links a {
-            color: var(--text-muted);
+            color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 400;
-            transition: var(--transition);
-            letter-spacing: 2px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--white);
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
+        .nav-links a:hover { color: var(--accent-primary); }
 
-        /* --- HERO --- */
+        /* --- HERO (INÍCIO) --- */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            margin: 0 auto;
             text-align: center;
         }
 
-        .hero-content h1 {
-            font-size: clamp(2.5rem, 10vw, 5rem);
-            line-height: 0.9;
-            margin-bottom: 30px;
-            background: linear-gradient(to bottom, #fff 40%, #555 100%);
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 10vw, 5.5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(to bottom, #fff 50%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-content p {
-            font-size: 1rem;
-            font-weight: 200;
-            color: var(--text-muted);
-            max-width: 500px;
-            margin: 0 auto 50px;
-            letter-spacing: 1px;
+        .tagline {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 6px 16px;
+            border-radius: 100px;
+            color: var(--accent-primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            display: inline-block;
         }
 
-        /* --- IMAGENS ESTILIZADAS --- */
-        .img-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 4px;
-            background: var(--bg-grey);
+        .hero p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin: 0 auto 40px;
         }
 
-        .img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%) brightness(0.7);
-            transition: var(--transition);
+        /* --- BOTÕES --- */
+        .btn-principal {
+            padding: 16px 40px;
+            background: var(--grad-linear);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
         }
 
-        .img-container:hover img {
-            filter: grayscale(0%) brightness(0.9);
-            transform: scale(1.05);
+        .btn-principal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.5);
         }
 
         /* --- SERVIÇOS --- */
-        .services-grid {
+        .section-titulo { margin-bottom: 50px; text-align: left; }
+        .section-titulo h2 { font-family: 'Outfit', sans-serif; font-size: 2.5rem; }
+
+        .grid-servicos {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
         }
 
-        .service-card {
-            background: rgba(255, 255, 255, 0.02);
+        .card-servico {
+            background: var(--bg-card);
             backdrop-filter: blur(10px);
-            padding: 30px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            border: 1px solid var(--border-glass);
+            padding: 35px;
+            border-radius: 20px;
+            transition: var(--transition-smooth);
+        }
+
+        .card-servico:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-8px);
+            background: rgba(20, 25, 35, 0.9);
+        }
+
+        .icone {
+            width: 45px;
+            height: 45px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
-        }
-
-        .service-card .card-image {
-            height: 180px;
-            margin-bottom: 25px;
-            border-radius: 2px;
-        }
-
-        .service-card:hover {
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(255, 255, 255, 0.04);
-            transform: translateY(-5px);
-        }
-
-        .service-card i {
-            color: var(--white);
+            align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
-            opacity: 0.8;
+            color: var(--accent-primary);
         }
 
-        .service-card h3 {
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
+        .card-servico h3 { margin-bottom: 12px; font-size: 1.2rem; }
+        .card-servico p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.5; }
 
-        .service-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 300;
-        }
-
-        /* --- TESTEMUNHOS --- */
-        .testimonial-slide p {
-            font-size: 1.5rem;
-            font-weight: 200;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            line-height: 1.4;
-        }
+        /* --- ANIMAÇÃO DE SURGIMENTO --- */
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* --- RODAPÉ --- */
         footer {
-            padding: 100px 0 50px;
-            border-top: 1px solid var(--border);
-        }
-
-        .copyright {
-            margin-top: 40px;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--text-muted);
-            text-transform: uppercase;
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--border-glass);
+            margin-top: 80px;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero-content h1 { font-size: 3.5rem; }
-            .section-padding { padding: 80px 0; }
-            .about-flex { flex-direction: column; }
-        }
-
-        /* Grid de Sobre */
-        .about-flex {
-            display: flex;
-            gap: 60px;
-            align-items: center;
+            .hero h1 { font-size: 3rem; }
+            header { width: 95%; padding: 12px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loader -->
+    <!-- Carregamento -->
     <div id="loader">
         <div class="loader-content">
-            <svg class="loader-logo" viewBox="0 0 100 100">
+            <svg class="loader-logo" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="2">
                 <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" />
             </svg>
-            <div class="loader-bar-container">
-                <div class="loader-bar"></div>
-            </div>
+            <div style="font-size: 0.6rem; letter-spacing: 4px; color: white; opacity: 0.7;">PREPARANDO TUDO...</div>
         </div>
     </div>
 
-    <div class="bg-wrapper">
-        <div class="glow-orb"></div>
-        <div class="geo-grid"></div>
+    <!-- Fundo -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
     </div>
 
     <header id="header">
-        <div class="container">
-            <nav>
-                <a href="#" class="logo">
-                    <svg viewBox="0 0 100 100">
-                        <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" />
-                        <path d="M50 10 L50 70" opacity="0.3" />
-                    </svg>
-                    <span>PATRONUS</span>
-                </a>
-                
-                <ul class="nav-links">
-                    <li><a href="#home">Início</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#servicos">Serviços</a></li>
-                    <li><a href="#contato">Contato</a></li>
-                </ul>
-            </nav>
-        </div>
+        <nav>
+            <a href="#" class="logo">
+                <svg viewBox="0 0 100 100">
+                    <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" />
+                </svg>
+                <span>PATRONUS</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#servicos">O que fazemos</a></li>
+                <li><a href="#contato">Fale conosco</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <section class="hero" id="home">
-        <div class="container hero-content">
-            <h1 class="reveal">Arquitetura Digital.</h1>
-            <p class="reveal">Cuidamos da sua presença online, desde a empresa a influenciador, elevamos marcas e levamos marcas até creators.</p>
-            <a href="#contato" class="btn reveal">Iniciar Projeto</a>
-        </div>
-    </section>
-
-    <section class="about section-padding" id="sobre">
-        <div class="container">
-            <div class="about-flex">
-                <div style="flex: 1;">
-                    <div class="section-title reveal">
-                        <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">01. Manifesto</h2>
-                        <h2 style="margin-top: 10px;">Sobre a Patronus</h2>
-                    </div>
-                    <p class="about-text reveal" style="text-align: left; margin-bottom: 30px;">
-                        Somos especialistas em estratégias para crescimento digital. Ajudamos marcas a expandir o seu alcance através da interseção entre criatividade, análise de dados e design. 
-                        <br><br>
-                        O nosso foco é a transformação, criação de identidade visando resultados duradouros, nada de resposta imediata.
-                    </p>
-                </div>
-                <div style="flex: 1;" class="reveal">
-                    <div class="img-container" style="height: 400px;">
-                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800" alt="[Imagem de escritório moderno e minimalista]">
-                    </div>
+    <main style="padding: 0 5%;">
+        <!-- Início -->
+        <section class="hero" id="inicio">
+            <div class="hero-content">
+                <div class="tagline reveal">Estratégias que trazem resultados</div>
+                <h1 class="reveal">Sua marca com a cara do futuro.</h1>
+                <p class="reveal">Ajudamos empresas e criadores de conteúdo a ganharem destaque na internet com design profissional e estratégias de venda.</p>
+                <div class="reveal">
+                    <a href="#contato" class="btn-principal">
+                        Quero crescer minha marca
+                        <i data-lucide="chevron-right" size="18"></i>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="services section-padding" id="servicos">
-        <div class="container">
-            <div class="section-title reveal" style="margin-bottom: 60px;">
-                <h2 style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">02. Especialidades</h2>
-                <h2 style="margin-top: 10px;">Serviços</h2>
+        <!-- O que fazemos -->
+        <section id="servicos" style="max-width: 1200px; margin: 0 auto; padding: 80px 0;">
+            <div class="section-titulo reveal">
+                <span style="color: var(--accent-primary); font-weight: 700; font-size: 0.8rem; letter-spacing: 2px;">COMO TE AJUDAMOS</span>
+                <h2>Nossos serviços</h2>
             </div>
 
-            <div class="services-grid">
-                <!-- Redes Sociais -->
-                <div class="service-card reveal">
-                    <div class="img-container card-image">
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600" alt="[Imagem de equipe colaborando em estratégia]">
-                    </div>
-                    <i data-lucide="zap" size="20"></i>
+            <div class="grid-servicos">
+                <div class="card-servico reveal">
+                    <div class="icone"><i data-lucide="users"></i></div>
                     <h3>Redes Sociais</h3>
-                    <p>Gestão e curadoria estratégica de conteúdo para marcas e influenciadores que buscam relevância real.</p>
+                    <p>Cuidamos do seu perfil para que você tenha postagens profissionais e atraia mais seguidores interessados.</p>
                 </div>
-                <!-- Tráfego Pago -->
-                <div class="service-card reveal">
-                    <div class="img-container card-image">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600" alt="[Imagem de gráficos de análise de dados]">
-                    </div>
-                    <i data-lucide="target" size="20"></i>
-                    <h3>Tráfego Pago</h3>
-                    <p>Escalabilidade garantida através de performance baseada em inteligência de dados.</p>
+                <div class="card-servico reveal">
+                    <div class="icone"><i data-lucide="rocket"></i></div>
+                    <h3>Anúncios Pagos</h3>
+                    <p>Colocamos sua marca na frente de quem realmente quer comprar o seu produto ou serviço.</p>
                 </div>
-                <!-- Branding -->
-                <div class="service-card reveal">
-                    <div class="img-container card-image">
-                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=600" alt="[Imagem de tipografia e design de marca]">
-                    </div>
-                    <i data-lucide="aperture" size="20"></i>
-                    <h3>Branding</h3>
-                    <p>Construção de identidades visuais memoráveis que traduzem a alma do seu negócio.</p>
+                <div class="card-servico reveal">
+                    <div class="icone"><i data-lucide="palette"></i></div>
+                    <h3>Identidade Visual</h3>
+                    <p>Criamos logotipos e cores que passam confiança e mostram o valor do seu negócio.</p>
                 </div>
-                <!-- Web Design -->
-                <div class="service-card reveal">
-                    <div class="img-container card-image">
-                        <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=600" alt="[Imagem de interface de usuário minimalista]">
-                    </div>
-                    <i data-lucide="terminal" size="20"></i>
-                    <h3>Web Design</h3>
-                    <p>Interfaces intuitivas que convertem visitantes em clientes fiéis, elevando o padrão estético.</p>
+                <div class="card-servico reveal">
+                    <div class="icone"><i data-lucide="layout"></i></div>
+                    <h3>Criação de Sites</h3>
+                    <p>Desenvolvemos páginas rápidas e bonitas que funcionam bem no celular e computador.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="testimonials section-padding">
-        <div class="container">
-            <div class="testimonial-slider reveal">
-                <div class="testimonial-track" id="sliderTrack">
-                    <div class="testimonial-slide">
-                        <p>"A Patronus redefiniu completamente o nosso padrão de qualidade no markeitng."</p>
-                        <span style="letter-spacing: 2px; font-size: 0.7rem; color: var(--text-muted);">CEO DA TECHFLOW</span>
-                    </div>
-                    <div class="testimonial-slide">
-                        <p>"Design aliado a resultados comerciais tangíveis e imediatos."</p>
-                        <span style="letter-spacing: 2px; font-size: 0.7rem; color: var(--text-muted);">GRUPO VISION</span>
-                    </div>
+        <!-- Contato -->
+        <section id="contato" style="padding: 60px 0; max-width: 900px; margin: 0 auto;">
+            <div class="card-servico reveal" style="text-align: center; padding: 60px 20px; border-color: rgba(59, 130, 246, 0.3);">
+                <h2 style="font-size: clamp(1.8rem, 5vw, 3rem); margin-bottom: 15px;">Vamos conversar?</h2>
+                <p style="margin-bottom: 35px; color: var(--text-dim);">Dê o primeiro passo para transformar sua presença online hoje mesmo.</p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://wa.me/5541996641617" class="btn-principal">Conversar no WhatsApp</a>
+                    <a href="mailto:patronusphoto@gmail.com" class="btn-principal" style="background: rgba(255,255,255,0.05); box-shadow: none; border: 1px solid var(--border-glass);">Enviar um E-mail</a>
                 </div>
-                <div class="slider-dots" id="sliderDots"></div>
             </div>
-        </div>
-    </section>
-
-    <section class="contact section-padding" id="contato">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 80px;" class="reveal">
-                <h2 style="font-size: clamp(2rem, 5vw, 3rem);">Pronto para escalar?</h2>
-                <p style="color: var(--text-muted);">A sua próxima fase de crescimento começa aqui.</p>
-            </div>
-            
-            <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;" class="reveal">
-                <a href="https://wa.me/5541996641617" class="btn">WhatsApp</a>
-                <a href="mailto:patronusphoto@gmail.com" class="btn" style="background: transparent; color: white;">E-mail</a>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer>
-        <div class="container" style="text-align: center;">
-            <div class="logo" style="justify-content: center;">
-                <svg viewBox="0 0 100 100" style="width: 20px; height: 20px;">
-                    <path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" fill="none" stroke="white" stroke-width="2"/>
-                </svg>
-                <span style="font-size: 0.8rem;">PATRONUS</span>
-            </div>
-            <p class="copyright">&copy; 2026 AGÊNCIA PATRONUS. ALÉM DO DIGITAL.</p>
+        <div class="logo" style="justify-content: center; opacity: 0.4; margin-bottom: 15px;">
+            <svg viewBox="0 0 100 100"><path d="M50 10 L80 40 L70 90 L50 70 L30 90 L20 40 Z" /></svg>
+            <span style="font-size: 0.9rem;">PATRONUS</span>
         </div>
+        <p style="font-size: 0.75rem; color: var(--text-dim);">
+            &copy; 2026 Agência Patronus. Todos os direitos reservados.
+        </p>
     </footer>
 
     <script>
         lucide.createIcons();
 
-        // Lógica do Loader (3 segundos)
+        // Remover tela de carregamento
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.classList.add('fade-out');
-                // Inicia as animações de revelação após o loader sair
-                setTimeout(reveal, 200);
-            }, 3000);
+                document.getElementById('loader').classList.add('fade-out');
+                reveal();
+            }, 1500);
         });
 
-        // Lógica de Scroll do Cabeçalho
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
+        // Mostrar elementos ao rolar a página
+        window.addEventListener('scroll', reveal);
 
-        // Lógica de Revelação de Elementos
-        const reveal = () => {
+        function reveal() {
             document.querySelectorAll('.reveal').forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 50) {
                     el.classList.add('active');
                 }
             });
-        };
-        window.addEventListener('scroll', reveal);
-
-        // Lógica do Slider de Testemunhos
-        const track = document.getElementById('sliderTrack');
-        const dotsContainer = document.getElementById('sliderDots');
-        const slides = document.querySelectorAll('.testimonial-slide');
-        let current = 0;
-
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.className = `dot ${i === 0 ? 'active' : ''}`;
-            dot.style.cssText = "width:6px; height:6px; background:rgba(255,255,255,0.1); border-radius:50%; cursor:pointer; transition:0.3s; margin: 0 5px;";
-            if(i===0) dot.style.background = "white";
-            dot.addEventListener('click', () => {
-                current = i;
-                update();
-            });
-            dotsContainer.appendChild(dot);
-        });
-
-        function update() {
-            track.style.transform = `translateX(-${current * 100}%)`;
-            document.querySelectorAll('.dot').forEach((d, i) => {
-                d.style.background = i === current ? "white" : "rgba(255,255,255,0.1)";
-            });
         }
-
-        setInterval(() => {
-            current = (current + 1) % slides.length;
-            update();
-        }, 6000);
     </script>
 </body>
 </html>
